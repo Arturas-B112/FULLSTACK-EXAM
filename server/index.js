@@ -82,12 +82,43 @@ server.post('/login', async (req, res) => {
       const token = jwt.sign(
         {
           admin_id: data[0].id,
+          admin_name: data[0].admin_name,
         },
         process.env.JWT_SECRET
       );
       return res.status(200).send({ token });
     }
     return res.status(400).send({ error: 'Email or password did not match!' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+});
+
+server.post('/visitors', authenticate, async (req, res) => {
+  try {
+    const payload = req.body;
+
+    const response = await dbPool.execute(
+      `INSERT INTO events.visitors (visitor_fullname, email, dob, admin_id)
+            VALUES (?, ?, ?, ?)`,
+      [payload.visitor_fullname, payload.email, payload.dob, req.admin.admin_id]
+    );
+
+    res
+      .status(201)
+      .send({ message: 'Visitor successfully registered to the event!' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+});
+
+server.get('/visitors', authenticate, async (_, res) => {
+  try {
+    const [response] = await dbPool.execute(`SELECT * FROM events.visitors`);
+
+    res.status(200).json(response);
   } catch (error) {
     console.log(error);
     res.status(500).end();
