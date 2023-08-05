@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 require('dotenv').config();
 const { dbConfig } = require('./config');
+const { authenticate } = require('./middleware');
 
 const server = express();
 
@@ -44,6 +45,49 @@ server.post('/register', async (req, res) => {
     );
 
     res.status(201).send({ message: 'Admin registered!' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+});
+
+server.post('/login', async (req, res) => {
+  let payload = req.body;
+
+  try {
+    payload = await adminLoginSchema.validateAsync(payload);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error: 'All field are required!' });
+  }
+
+  try {
+    const [data] = await dbPool.execute(
+      `SELECT * FROM events.admins WHERE email = ?`,
+      [payload.email]
+    );
+
+    if (!data.length) {
+      return res
+        .status(400)
+        .send({ error: 'Email or password did not match!' });
+    }
+
+    const isPasswordMatching = await bcrypt.compare(
+      payload.password,
+      data[0].password
+    );
+
+    if (isPasswordMatching) {
+      const token = jwt.sign(
+        {
+          admin_id: data[0].id,
+        },
+        process.env.JWT_SECRET
+      );
+      return res.status(200).send({ token });
+    }
+    return res.status(400).send({ error: 'Email or password did not match!' });
   } catch (error) {
     console.log(error);
     res.status(500).end();
