@@ -63,7 +63,7 @@ const AddVisitorDialog = ({ open, onClose, onSave, loading }) => {
             onSave({ name, date: date.toISOString().substring(0, 10), email })
           }
         >
-          Save
+          Add
         </Button>
       </DialogActions>
     </Dialog>

@@ -127,6 +127,20 @@ server.get('/visitors', authenticate, async (_, res) => {
   }
 });
 
+server.delete('/visitors/:id', authenticate, async (req, res) => {
+  try {
+    const [response] = await dbPool.execute(
+      `DELETE FROM events.visitors WHERE id=?`,
+      [req.params.id]
+    );
+
+    res.status(200).send(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+});
+
 server.listen(process.env.PORT, () =>
   console.log(`Server is running on port: ${process.env.PORT}`)
 );

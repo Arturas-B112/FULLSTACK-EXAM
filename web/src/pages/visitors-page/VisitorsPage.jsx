@@ -1,9 +1,9 @@
-import { Button, LinearProgress, Stack } from '@mui/material';
+import { Button, LinearProgress, Stack, Typography } from '@mui/material';
 import PageHeader from '../../components/header/PageHeader';
 import Cookies from 'js-cookie';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { addVisitors, getVisitors } from '../../api';
+import { addVisitors, deleteVisitors, getVisitors } from '../../api';
 import VisitorsTable from './VisitorsTable';
 import AddVisitorDialog from './AddVisitorDialog';
 
@@ -56,7 +56,7 @@ const VisitorsPage = () => {
           visitor_fullname: body.name,
           email: body.email,
           dob: body.date,
-          admin_id: state.admin_id,
+          admin_id: state.id,
         },
       ]);
 
@@ -66,9 +66,23 @@ const VisitorsPage = () => {
     }
   };
 
+  const handleDeleteVisitor = async (id, headers) => {
+    setIsLoading(true);
+    try {
+      await deleteVisitors(id, headers);
+
+      setVisitors((prev) => prev.filter((visitor) => visitor.id !== id));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Visitors Page">
+        <Typography>Your Admin ID is: {state.id}</Typography>
         <Button
           variant="outlined"
           onClick={() => {
@@ -84,7 +98,10 @@ const VisitorsPage = () => {
         <Button variant="contained" onClick={() => setIsDialogOpen(true)}>
           Add new visitor
         </Button>
-        <VisitorsTable visitors={visitors} />
+        <VisitorsTable
+          visitors={visitors}
+          onDelete={(id) => handleDeleteVisitor(id, headers)}
+        />
       </Stack>
       {isDialogOpen && (
         <AddVisitorDialog

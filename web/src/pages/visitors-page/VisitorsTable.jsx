@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@mui/material';
 
-const VisitorsTable = ({ visitors }) => {
+const VisitorsTable = ({ visitors, onDelete, onUpdate }) => {
   return (
     <>
       <TableContainer component={Paper} sx={{ maxWidth: 950 }}>
@@ -27,7 +27,7 @@ const VisitorsTable = ({ visitors }) => {
             {visitors.map((visitor) => (
               <>
                 <TableRow
-                  key={visitor.id}
+                  key={`${visitor.id}`}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
@@ -37,10 +37,10 @@ const VisitorsTable = ({ visitors }) => {
                   <TableCell>{visitor.dob.substring(0, 10)}</TableCell>
                   <TableCell>{visitor.admin_id}</TableCell>
                   <TableCell>
-                    <Button>Delete</Button>
+                    <Button onClick={() => onDelete(visitor.id)}>Delete</Button>
                   </TableCell>
                   <TableCell>
-                    <Button>Update</Button>
+                    <Button onClick={() => onUpdate(visitor.id)}>Update</Button>
                   </TableCell>
                 </TableRow>
               </>

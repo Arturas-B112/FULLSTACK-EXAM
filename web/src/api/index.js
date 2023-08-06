@@ -11,3 +11,6 @@ export const getVisitors = (headers) =>
 
 export const addVisitors = (body, headers) =>
   axios.post(`${baseUrl}visitors`, body, { headers });
+
+export const deleteVisitors = (id, headers) =>
+  axios.delete(`${baseUrl}visitors/${id}`, { headers });
