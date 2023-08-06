@@ -88,7 +88,7 @@ server.post('/login', async (req, res) => {
         },
         process.env.JWT_SECRET
       );
-      return res.status(200).send({ token });
+      return res.status(200).send({ token, data });
     }
     return res.status(400).send({ error: 'Email or password did not match!' });
   } catch (error) {

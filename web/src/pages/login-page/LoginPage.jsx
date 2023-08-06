@@ -21,7 +21,12 @@ const LoginPage = () => {
       });
 
       Cookies.set('token', response.data.token);
-      navigate('/visitors');
+      navigate('/visitors', {
+        state: {
+          id: response.data.data[0].id,
+          admin_name: response.data.data[0].admin_name,
+        },
+      });
     } catch ({ response }) {
       setError(response.data.error);
     } finally {
