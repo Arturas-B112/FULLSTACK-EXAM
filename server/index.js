@@ -34,6 +34,7 @@ server.post('/register', async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).send({ error: 'All fields are required!' });
+    return;
   }
 
   try {
@@ -44,7 +45,7 @@ server.post('/register', async (req, res) => {
       [payload.admin_name, payload.email, encryptedPassword]
     );
 
-    res.status(201).send({ message: 'Admin registered!' });
+    res.status(201).send({ message: 'Admin registered! Now you can login :)' });
   } catch (error) {
     console.log(error);
     res.status(500).end();
@@ -59,6 +60,7 @@ server.post('/login', async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).send({ error: 'All field are required!' });
+    return;
   }
 
   try {
