@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import RegisterForm from './RegisterForm';
 import { useState } from 'react';
 import { adminRegister } from '../../api';
-import { Button, Typography } from '@mui/material';
+import { Button, LinearProgress, Typography } from '@mui/material';
 
 const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +37,7 @@ const RegisterPage = () => {
           LOGIN
         </Button>
       </PageHeader>
+      {isLoading && <LinearProgress />}
       <RegisterForm
         onRegister={(body) => handleAdminRegister(body)}
         loading={isLoading}
