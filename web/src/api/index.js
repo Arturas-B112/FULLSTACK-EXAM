@@ -14,3 +14,6 @@ export const addVisitors = (body, headers) =>
 
 export const deleteVisitors = (id, headers) =>
   axios.delete(`${baseUrl}visitors/${id}`, { headers });
+
+export const updateVisitors = (id, body, headers) =>
+  axios.put(`${baseUrl}visitors/${id}`, body, { headers });

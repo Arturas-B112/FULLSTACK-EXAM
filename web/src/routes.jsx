@@ -3,6 +3,7 @@ import PageTemplate from './components/layout/page-template/PageTemplate';
 import RegisterPage from './pages/register-page/RegisterPage';
 import LoginPage from './pages/login-page/LoginPage';
 import VisitorsPage from './pages/visitors-page/VisitorsPage';
+import UpdateVisitorsPage from './pages/update-visitors-page/UpdateVisitorsPage';
 
 export const routes = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const routes = createBrowserRouter([
       {
         path: '/visitors',
         element: <VisitorsPage />,
+      },
+      {
+        path: '/visitors/:id',
+        element: <UpdateVisitorsPage />,
       },
     ],
   },

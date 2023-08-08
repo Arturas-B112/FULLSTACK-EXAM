@@ -3,7 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import RegisterForm from './RegisterForm';
 import { useState } from 'react';
 import { adminRegister } from '../../api';
-import { Button, LinearProgress, Typography } from '@mui/material';
+import {
+  Alert,
+  Button,
+  LinearProgress,
+  Stack,
+  Typography,
+} from '@mui/material';
 
 const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,14 +49,14 @@ const RegisterPage = () => {
         loading={isLoading}
       />
       {message && (
-        <Typography textAlign="center" mt={2}>
-          {message}
-        </Typography>
+        <Stack alignItems="center" mt={2}>
+          <Alert severity="success">{message}</Alert>
+        </Stack>
       )}
       {error && (
-        <Typography textAlign="center" mt={2}>
-          {error}
-        </Typography>
+        <Stack alignItems="center" mt={2}>
+          <Alert severity="error">{error}</Alert>
+        </Stack>
       )}
     </>
   );

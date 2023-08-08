@@ -1,6 +1,5 @@
 import { Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
-import { adminLogin } from '../../api';
 
 const LoginForm = ({ loading, onLogin }) => {
   const [email, setEmail] = useState('');

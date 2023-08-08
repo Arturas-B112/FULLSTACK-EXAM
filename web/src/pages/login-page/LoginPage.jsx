@@ -1,4 +1,10 @@
-import { Button, LinearProgress, Typography } from '@mui/material';
+import {
+  Alert,
+  Button,
+  LinearProgress,
+  Stack,
+  Typography,
+} from '@mui/material';
 import PageHeader from '../../components/header/PageHeader';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
@@ -23,8 +29,7 @@ const LoginPage = () => {
       Cookies.set('token', response.data.token);
       navigate('/visitors', {
         state: {
-          id: response.data.data[0].id,
-          admin_name: response.data.data[0].admin_name,
+          admin_id: response.data.data[0].id,
         },
       });
     } catch ({ response }) {
@@ -47,9 +52,9 @@ const LoginPage = () => {
         loading={isLoading}
       />
       {error && (
-        <Typography textAlign="center" mt={2}>
-          {error}
-        </Typography>
+        <Stack alignItems="center" mt={2}>
+          <Alert severity="error">{error}</Alert>
+        </Stack>
       )}
     </>
   );

@@ -1,4 +1,10 @@
-import { Button, LinearProgress, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  LinearProgress,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import PageHeader from '../../components/header/PageHeader';
 import Cookies from 'js-cookie';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -16,10 +22,12 @@ const VisitorsPage = () => {
   const { state } = useLocation();
 
   const [visitors, setVisitors] = useState([]);
+  const [filteredVisitors, setFilteredVisitors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [keyword, setKeyword] = useState('');
 
-  const onDialogClose = () => setIsDialogOpen(false);
+  const onAddDialogClose = () => setIsAddDialogOpen(false);
 
   const fetchVisitors = async (headers) => {
     setIsLoading(true);
@@ -27,6 +35,7 @@ const VisitorsPage = () => {
       const { data } = await getVisitors(headers);
 
       setVisitors(data);
+      setFilteredVisitors(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -49,18 +58,18 @@ const VisitorsPage = () => {
         headers
       );
 
-      setVisitors((prev) => [
+      setFilteredVisitors((prev) => [
         ...prev,
         {
           id: response.insertId,
           visitor_fullname: body.name,
           email: body.email,
           dob: body.date,
-          admin_id: state.id,
+          admin_id: state.admin_id,
         },
       ]);
 
-      setIsDialogOpen(false);
+      setIsAddDialogOpen(false);
     } catch (error) {
       console.log(error);
     }
@@ -69,9 +78,11 @@ const VisitorsPage = () => {
   const handleDeleteVisitor = async (id, headers) => {
     setIsLoading(true);
     try {
-      await deleteVisitors(id, headers);
+      const response = await deleteVisitors(id, headers);
 
-      setVisitors((prev) => prev.filter((visitor) => visitor.id !== id));
+      setFilteredVisitors((prev) =>
+        prev.filter((visitor) => visitor.id !== id)
+      );
     } catch (error) {
       console.log(error);
     } finally {
@@ -79,10 +90,24 @@ const VisitorsPage = () => {
     }
   };
 
+  const handleFilter = (e) => {
+    const keyword = e.target.value;
+    setKeyword(keyword);
+
+    if (keyword !== '') {
+      const results = visitors.filter((visitor) =>
+        visitor.visitor_fullname.toLowerCase().includes(keyword.toLowerCase())
+      );
+      setFilteredVisitors(results);
+    } else {
+      setFilteredVisitors(visitors);
+    }
+  };
+
   return (
     <>
       <PageHeader title="Visitors Page">
-        <Typography>Your Admin ID is: {state.id}</Typography>
+        <Typography>Your admin ID is: {state.admin_id}</Typography>
         <Button
           variant="outlined"
           onClick={() => {
@@ -95,19 +120,37 @@ const VisitorsPage = () => {
       </PageHeader>
       {isLoading && <LinearProgress />}
       <Stack my={2} mx="auto" spacing={1}>
-        <Button variant="contained" onClick={() => setIsDialogOpen(true)}>
+        <Button variant="contained" onClick={() => setIsAddDialogOpen(true)}>
           Add new visitor
         </Button>
+        <Stack py={2}>
+          <TextField
+            label="Filter by visitor name"
+            type="search"
+            value={keyword}
+            variant="outlined"
+            onChange={handleFilter}
+          />
+        </Stack>
         <VisitorsTable
-          visitors={visitors}
+          visitors={filteredVisitors}
           onDelete={(id) => handleDeleteVisitor(id, headers)}
+          onUpdate={(visitor) => {
+            navigate(`/visitors/${visitor.id}`, {
+              state: {
+                visitor,
+                headers,
+                admin_id: state.admin_id,
+              },
+            });
+          }}
         />
       </Stack>
-      {isDialogOpen && (
+      {isAddDialogOpen && (
         <AddVisitorDialog
           loading={isLoading}
-          open={isDialogOpen}
-          onClose={onDialogClose}
+          open={isAddDialogOpen}
+          onClose={onAddDialogClose}
           onSave={(body) => handleAddVisitor(body, headers)}
         />
       )}
