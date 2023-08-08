@@ -141,6 +141,23 @@ server.delete('/visitors/:id', authenticate, async (req, res) => {
   }
 });
 
+server.put('/visitors/:id', authenticate, async (req, res) => {
+  try {
+    const payload = req.body;
+
+    const [response] = await dbPool.execute(
+      `UPDATE events.visitors
+      SET visitor_fullname=?, email=?, dob=?
+      WHERE id=?`,
+      [payload.visitor_fullname, payload.email, payload.dob, req.params.id]
+    );
+
+    res.status(200).send(response);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 server.listen(process.env.PORT, () =>
   console.log(`Server is running on port: ${process.env.PORT}`)
 );
