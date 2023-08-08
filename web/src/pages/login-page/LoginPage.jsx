@@ -1,10 +1,4 @@
-import {
-  Alert,
-  Button,
-  LinearProgress,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, LinearProgress, Stack } from '@mui/material';
 import PageHeader from '../../components/header/PageHeader';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
@@ -21,17 +15,13 @@ const LoginPage = () => {
   const handleAdminLogin = async (body) => {
     setIsLoading(true);
     try {
-      const response = await adminLogin({
+      const { data } = await adminLogin({
         email: body.email,
         password: body.password,
       });
 
-      Cookies.set('token', response.data.token);
-      navigate('/visitors', {
-        state: {
-          admin_id: response.data.data[0].id,
-        },
-      });
+      Cookies.set('token', data.token);
+      navigate('/visitors');
     } catch ({ response }) {
       setError(response.data.error);
     } finally {

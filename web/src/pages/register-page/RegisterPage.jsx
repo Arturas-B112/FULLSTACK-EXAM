@@ -1,15 +1,9 @@
 import PageHeader from '../../components/header/PageHeader';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RegisterForm from './RegisterForm';
 import { useState } from 'react';
 import { adminRegister } from '../../api';
-import {
-  Alert,
-  Button,
-  LinearProgress,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, LinearProgress, Stack } from '@mui/material';
 
 const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);

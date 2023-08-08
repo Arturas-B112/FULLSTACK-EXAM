@@ -1,13 +1,7 @@
-import {
-  Button,
-  LinearProgress,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, LinearProgress, Stack, TextField } from '@mui/material';
 import PageHeader from '../../components/header/PageHeader';
 import Cookies from 'js-cookie';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { addVisitors, deleteVisitors, getVisitors } from '../../api';
 import VisitorsTable from './VisitorsTable';
@@ -19,7 +13,6 @@ const VisitorsPage = () => {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
-  const { state } = useLocation();
 
   const [visitors, setVisitors] = useState([]);
   const [filteredVisitors, setFilteredVisitors] = useState([]);
@@ -49,7 +42,7 @@ const VisitorsPage = () => {
 
   const handleAddVisitor = async (body, headers) => {
     try {
-      const response = await addVisitors(
+      const { data } = await addVisitors(
         {
           visitor_fullname: body.name,
           email: body.email,
@@ -61,11 +54,10 @@ const VisitorsPage = () => {
       setFilteredVisitors((prev) => [
         ...prev,
         {
-          id: response.insertId,
           visitor_fullname: body.name,
           email: body.email,
           dob: body.date,
-          admin_id: state.admin_id,
+          admin_id: data.admin_id,
         },
       ]);
 
@@ -78,7 +70,7 @@ const VisitorsPage = () => {
   const handleDeleteVisitor = async (id, headers) => {
     setIsLoading(true);
     try {
-      const response = await deleteVisitors(id, headers);
+      await deleteVisitors(id, headers);
 
       setFilteredVisitors((prev) =>
         prev.filter((visitor) => visitor.id !== id)
@@ -107,7 +99,6 @@ const VisitorsPage = () => {
   return (
     <>
       <PageHeader title="Visitors Page">
-        <Typography>Your admin ID is: {state.admin_id}</Typography>
         <Button
           variant="outlined"
           onClick={() => {
@@ -140,7 +131,6 @@ const VisitorsPage = () => {
               state: {
                 visitor,
                 headers,
-                admin_id: state.admin_id,
               },
             });
           }}

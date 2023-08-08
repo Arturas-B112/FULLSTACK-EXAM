@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/header/PageHeader';
-import { Button, LinearProgress, Typography } from '@mui/material';
+import { Button, LinearProgress } from '@mui/material';
 import Cookies from 'js-cookie';
 import UpdateVisitorsForm from './UpdateVisitorForm';
 import { updateVisitors } from '../../api';
@@ -25,11 +25,7 @@ const UpdateVisitorsPage = () => {
         headers
       );
 
-      navigate('/visitors', {
-        state: {
-          admin_id: state.admin_id,
-        },
-      });
+      navigate('/visitors');
     } catch (error) {
       console.log(error);
     } finally {
@@ -42,21 +38,17 @@ const UpdateVisitorsPage = () => {
       <PageHeader
         title={`Currently updating ${state.visitor.visitor_fullname}`}
       >
-        <Typography>Your admin ID is: {state.admin_id}</Typography>
         <Button
           variant="outlined"
           onClick={() => {
             Cookies.remove('token');
-            navigate('/', {
-              state: {
-                admin_id: state.admin_id,
-              },
-            });
+            navigate('/');
           }}
         >
           LOGOUT
         </Button>
       </PageHeader>
+      {isLoading && <LinearProgress />}
       <UpdateVisitorsForm
         visitor={state.visitor}
         onUpdate={(body) =>

@@ -1,7 +1,6 @@
 import {
   Button,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,

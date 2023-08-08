@@ -13,7 +13,7 @@ const updateVisitorsForm = ({ visitor, onUpdate }) => {
   useEffect(() => {
     setName(visitor.visitor_fullname);
     setEmail(visitor.email);
-    setDate(new Date('1995-05-17T21:00:00.000Z'));
+    setDate(new Date());
   }, []);
 
   return (
