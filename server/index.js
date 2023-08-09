@@ -59,7 +59,7 @@ server.post('/login', async (req, res) => {
     payload = await adminLoginSchema.validateAsync(payload);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ error: 'All field are required!' });
+    res.status(400).send({ error: 'All fields are required!' });
     return;
   }
 
