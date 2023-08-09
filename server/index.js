@@ -101,13 +101,15 @@ server.post('/visitors', authenticate, async (req, res) => {
   try {
     const payload = req.body;
 
-    const response = await dbPool.execute(
+    const [response] = await dbPool.execute(
       `INSERT INTO events.visitors (visitor_fullname, email, dob, admin_id)
             VALUES (?, ?, ?, ?)`,
       [payload.visitor_fullname, payload.email, payload.dob, req.admin.admin_id]
     );
 
-    res.status(201).send({ admin_id: req.admin.admin_id });
+    res
+      .status(201)
+      .send({ admin_id: req.admin.admin_id, id: response.insertId });
   } catch (error) {
     console.log(error);
     res.status(500).end();

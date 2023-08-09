@@ -1,4 +1,4 @@
-import { Button, LinearProgress, Stack, TextField } from '@mui/material';
+import { Alert, Button, LinearProgress, Stack, TextField } from '@mui/material';
 import PageHeader from '../../components/header/PageHeader';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,11 @@ import AddVisitorDialog from './AddVisitorDialog';
 const VisitorsPage = () => {
   const navigate = useNavigate();
   const token = Cookies.get('token');
+
+  if (!token) {
+    navigate('/');
+  }
+
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -54,6 +59,18 @@ const VisitorsPage = () => {
       setFilteredVisitors((prev) => [
         ...prev,
         {
+          id: data.id,
+          visitor_fullname: body.name,
+          email: body.email,
+          dob: body.date,
+          admin_id: data.admin_id,
+        },
+      ]);
+
+      setVisitors((prev) => [
+        ...prev,
+        {
+          id: data.id,
           visitor_fullname: body.name,
           email: body.email,
           dob: body.date,
@@ -75,6 +92,7 @@ const VisitorsPage = () => {
       setFilteredVisitors((prev) =>
         prev.filter((visitor) => visitor.id !== id)
       );
+      setVisitors((prev) => prev.filter((visitor) => visitor.id !== id));
     } catch (error) {
       console.log(error);
     } finally {
@@ -84,16 +102,16 @@ const VisitorsPage = () => {
 
   const handleFilter = (e) => {
     const keyword = e.target.value;
-    setKeyword(keyword);
 
     if (keyword !== '') {
-      const results = visitors.filter((visitor) =>
+      const results = filteredVisitors.filter((visitor) =>
         visitor.visitor_fullname.toLowerCase().includes(keyword.toLowerCase())
       );
       setFilteredVisitors(results);
     } else {
       setFilteredVisitors(visitors);
     }
+    setKeyword(keyword);
   };
 
   return (
@@ -136,6 +154,11 @@ const VisitorsPage = () => {
           }}
         />
       </Stack>
+      {filteredVisitors.length === 0 && (
+        <Stack alignItems="center" mt={2}>
+          <Alert severity="error">Add some data!</Alert>
+        </Stack>
+      )}
       {isAddDialogOpen && (
         <AddVisitorDialog
           loading={isLoading}
