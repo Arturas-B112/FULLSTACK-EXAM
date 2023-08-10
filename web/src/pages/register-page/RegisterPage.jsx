@@ -15,13 +15,13 @@ const RegisterPage = () => {
   const handleAdminRegister = async (body) => {
     setIsLoading(true);
     try {
-      const response = await adminRegister({
+      const { data } = await adminRegister({
         admin_name: body.name,
         email: body.email,
         password: body.password,
       });
       setError();
-      setMessage(response.data.message);
+      setMessage(data.message);
     } catch ({ response }) {
       setMessage();
       setError(response.data.error);

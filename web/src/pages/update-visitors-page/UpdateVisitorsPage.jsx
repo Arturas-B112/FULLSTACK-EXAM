@@ -15,7 +15,7 @@ const UpdateVisitorsPage = () => {
   const handleUpdateVisitor = async (id, body, headers) => {
     setIsLoading(true);
     try {
-      const response = await updateVisitors(
+      await updateVisitors(
         id,
         {
           visitor_fullname: body.name,

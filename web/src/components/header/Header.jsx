@@ -1,21 +1,14 @@
-import { Button, Stack, Typography } from '@mui/material';
 import icon from '../../assets/party.svg';
+import './Header.css';
 
 const Header = () => {
   return (
     <>
-      <Stack
-        my={2}
-        mx={2}
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <img src={icon} width={100}></img>
-        <Typography variant="h4"> FEUA5 Afterparty Event</Typography>
-        <Button
-          variant="outlined"
-          color="error"
+      <div className="header-container">
+        <img src={icon} className="logo"></img>
+        <h1 className="heading">FEUA5 Afterparty Event</h1>
+        <button
+          className="header-btn"
           onClick={() =>
             window.location.replace(
               'https://codeacademy.lt/?gclid=CjwKCAjw8symBhAqEiwAaTA__G7OvTPTvQkd7UoVxFyDj2SVlpGFd23reFOIMKur8u-_c93CY8BjKxoCBKoQAvD_BwE'
@@ -23,8 +16,8 @@ const Header = () => {
           }
         >
           Join CodeAcademy
-        </Button>
-      </Stack>
+        </button>
+      </div>
     </>
   );
 };

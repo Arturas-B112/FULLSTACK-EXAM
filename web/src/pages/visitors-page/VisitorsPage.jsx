@@ -127,7 +127,6 @@ const VisitorsPage = () => {
           LOGOUT
         </Button>
       </PageHeader>
-      {isLoading && <LinearProgress />}
       <Stack my={2} mx="auto" spacing={1}>
         <Button variant="contained" onClick={() => setIsAddDialogOpen(true)}>
           Add new visitor
@@ -141,6 +140,7 @@ const VisitorsPage = () => {
             onChange={handleFilter}
           />
         </Stack>
+        {isLoading && <LinearProgress />}
         <VisitorsTable
           visitors={filteredVisitors}
           onDelete={(id) => handleDeleteVisitor(id, headers)}
