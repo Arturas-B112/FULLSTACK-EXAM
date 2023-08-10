@@ -19,7 +19,6 @@ const VisitorsTable = ({ visitors, onDelete, onUpdate }) => {
               <TableCell>Full Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Date Of Birth</TableCell>
-              <TableCell>Admin ID</TableCell>
               <TableCell colSpan={2} align="center">
                 Actions
               </TableCell>
@@ -34,7 +33,6 @@ const VisitorsTable = ({ visitors, onDelete, onUpdate }) => {
                 <TableCell>{visitor.visitor_fullname}</TableCell>
                 <TableCell>{visitor.email}</TableCell>
                 <TableCell>{visitor.dob.substring(0, 10)}</TableCell>
-                <TableCell>{visitor.admin_id}</TableCell>
                 <TableCell>
                   <Button onClick={() => onDelete(visitor.id)}>Delete</Button>
                 </TableCell>
