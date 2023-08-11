@@ -11,10 +11,6 @@ const VisitorsPage = () => {
   const navigate = useNavigate();
   const token = Cookies.get('token');
 
-  if (!token) {
-    navigate('/');
-  }
-
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -42,6 +38,9 @@ const VisitorsPage = () => {
   };
 
   useEffect(() => {
+    if (!token) {
+      navigate('/');
+    }
     fetchVisitors(headers);
   }, []);
 
